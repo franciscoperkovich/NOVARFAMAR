@@ -6,8 +6,7 @@
 
 <div class="container mt-4 mb-5">
 
-    <!-- 🔹 TÍTULO -->
-    <h2 class="text-center fw-bold mb-4">Términos y Condiciones</h2>
+    <h2 class="text-center fw-bold mb-4">Términos y Condiciones de NovaFarmar</h2>
 
     <div class="row justify-content-center">
         <div class="col-md-10">

@@ -4,63 +4,6 @@
 
 @section('content')
 
-<style>
-    /* Estilos específicos para que el Welcome de Fran brille */
-    .carousel-item img {
-        height: 350px;
-        object-fit: cover;
-        border-radius: 10px 10px 0 0;
-    }
-
-    .info-footer {
-        background-color: #198754; /* Verde Bootstrap (Farmacia) */
-        color: white;
-        padding: 15px;
-        border-radius: 0 0 10px 10px;
-    }
-
-    /* Ajuste para el carrusel de perfumería (Azul) */
-    .info-footer-primary {
-        background-color: #0d6efd;
-        color: white;
-        padding: 15px;
-        border-radius: 0 0 10px 10px;
-    }
-
-    .producto-img {
-        width: 100px;
-        height: 100px;
-        object-fit: contain;
-        transition: transform 0.3s ease;
-    }
-
-    .product-card {
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .product-card:hover {
-        transform: translateY(-10px);
-        shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-
-    .section-title {
-        position: relative;
-        display: inline-block;
-        padding-bottom: 10px;
-    }
-
-    .section-title::after {
-        content: '';
-        position: absolute;
-        width: 50%;
-        height: 3px;
-        background-color: #198754;
-        bottom: 0;
-        left: 25%;
-    }
-</style>
-
 <div class="container mt-5">
     
     <div class="text-center mb-5">
@@ -75,14 +18,14 @@
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src="https://images.unsplash.com/photo-1586015555751-63bb77f4322a?q=80&w=800" class="d-block w-100">
-                        <div class="info-footer">
-                            <h6 class="fw-bold mb-0"><i class="bi bi-clock-history"></i> Atención 24hs</h6>
-                            <small>Av. 3 de Abril - Corrientes Capital</small>
-                        </div>
+                            <div class="info-footer-farmacia bg-success">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-clock-history"></i> Atención 24hs</h6>
+                                    <small>Av. 3 de Abril - Corrientes Capital</small>
+                            </div>
                     </div>
                     <div class="carousel-item">
                         <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800" class="d-block w-100">
-                        <div class="info-footer">
+                        <div class="info-footer-farmacia bg-success">
                             <h6 class="fw-bold mb-0"><i class="bi bi-file-earmark-medical"></i> Recetas Digitales</h6>
                             <small>Validación inmediata de Obras Sociales</small>
                         </div>
@@ -97,14 +40,14 @@
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=800" class="d-block w-100">
-                        <div class="info-footer-primary">
+                        <div class="info-footer-primary bg-success">
                             <h6 class="fw-bold mb-0"><i class="bi bi-stars"></i> Fragancias Seleccionadas</h6>
                             <small>Importadas y Nacionales con descuento</small>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=800" class="d-block w-100">
-                        <div class="info-footer-primary">
+                        <div class="info-footer-primary bg-success">
                             <h6 class="fw-bold mb-0"><i class="bi bi-droplet-half"></i> Dermocosmética</h6>
                             <small>Cuidado profesional para tu piel</small>
                         </div>
@@ -118,7 +61,7 @@
         <h3 class="fw-bold section-title">Productos Destacados</h3>
     </div>
 
-    <div class="row">
+    <div class="row welcome-products">
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm border-0 product-card text-center p-4">
                 <div class="mb-3">

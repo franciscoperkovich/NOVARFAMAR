@@ -4,35 +4,6 @@
 
 @section('content')
 
-<style>
-    /* Estilos para corregir la visualización de las fotos */
-    .profile-img {
-        width: 150px;
-        height: 150px;
-        object-fit: cover; /* Evita que la imagen se estire o aplaste */
-        border: 4px solid #f8f9fa;
-        transition: transform 0.3s ease;
-    }
-
-    .team-card {
-        border: none;
-        transition: all 0.3s ease;
-    }
-
-    /* Efecto sutil para que la tarjeta "flote" al pasar el mouse */
-    .team-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-    }
-
-    .role-badge {
-        font-size: 0.8rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        font-weight: bold;
-    }
-</style>
-
 <div class="container mt-5 mb-5">
 
     <div class="text-center mb-5">
