@@ -22,18 +22,18 @@ class AuthController extends Controller
     public function registrar(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'rol' => 'required|string'
-        ]);
+    'name' => 'required|string|max:255',
+    'email' => 'required|string|email|max:255|unique:users',
+    'password' => 'required|string|min:6|confirmed',
+]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), 
-            'rol' => $request->rol, 
-        ]);
+User::create([
+    'name' => $request->name,
+    'email' => $request->email,
+    'password' => Hash::make($request->password),
+    'rol' => 'cliente',
+]);
+        
 
         return redirect('/login')->with('success', '¡Usuario creado con éxito!');
     }

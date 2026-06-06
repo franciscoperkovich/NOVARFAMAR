@@ -27,18 +27,37 @@
                     </ul>
                 </li>
 
-<li class="nav-item">
-    <a href="/registros" class="btn btn-light">Ingresar</a>
-</li>
+                @auth
+                    <li class="nav-item">
+                        <span class="navbar-text text-white fw-bold me-2">
+                            ¡Hola, {{ auth()->user()->name }}!
+                        </span>
+                    </li>
 
-<li class="nav-item">
-    <a href="/acercaNosotros" class="btn btn-light">SobreNosotros</a>
-</li>
+                    @if(auth()->user()->rol === 'admin')
+                        <li class="nav-item">
+                            <a href="/admin/dashboard" class="btn btn-danger text-white fw-bold">Panel Admin</a>
+                        </li>
+                    @endif
 
-<li class="nav-item">
-    <a href="/contacto" class="btn btn-light">Contacto</a>
-</li>
+                    <li class="nav-item">
+                        <form action="/logout" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-light">Cerrar Sesión</button>
+                        </form>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a href="/login" class="btn btn-light">Ingresar</a>
+                    </li>
+                @endauth
+                <li class="nav-item">
+                    <a href="/acercaNosotros" class="btn btn-light">Sobre Nosotros</a>
+                </li>
 
+                <li class="nav-item">
+                    <a href="/contacto" class="btn btn-light">Contacto</a>
+                </li>
 
                 <li class="nav-item">
                     <a href="/carrito" class="btn btn-light position-relative w-100">

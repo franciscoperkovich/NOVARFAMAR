@@ -34,7 +34,11 @@
                     <h6 class="fw-bold">Enlaces</h6>
                     <ul class="list-unstyled">
                         <li><a href="/" class="text-white text-decoration-none">Inicio</a></li>
-                        <li><a href="/registros" class="text-white text-decoration-none">Ingresar</a></li>
+                        
+                        @guest
+                            <li><a href="/login" class="text-white text-decoration-none">Ingresar</a></li>
+                        @endguest
+                        
                         <li><a href="/contacto" class="text-white text-decoration-none">Contacto</a></li>
                         <li><a href="/terminos" class="text-white text-decoration-none">Términos y Condiciones</a></li>
                     </ul>

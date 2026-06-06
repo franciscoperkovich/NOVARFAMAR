@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Producto;
+use App\Models\Venta;
 
 class AdminController extends Controller
 {
-    // Muestra el panel principal del administrador
     public function index()
     {
-        return view('backend.admin.dashboard');
+        $usuarios = User::all();
+        $productos = Producto::all();
+        $ventas = Venta::all();
+
+        return view('backend.admin.dashboard', compact('usuarios', 'productos', 'ventas'));
     }
 }

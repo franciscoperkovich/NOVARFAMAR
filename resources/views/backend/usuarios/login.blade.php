@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - NovaFarmar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 📄 Sumamos los iconos de Bootstrap para la flechita de volver -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body class="bg-light">
     <div class="container mt-5">
@@ -30,9 +32,19 @@
 
                             <button type="submit" class="btn btn-success w-100">Ingresar</button>
                         </form>
+                        
                         <div class="text-center mt-3">
-                            <a href="/registro">¿No tenés cuenta? Registrate acá</a>
+                            <a href="/registro" class="text-decoration-none">¿No tenés cuenta? Registrate acá</a>
                         </div>
+
+                        <!-- 🔄 SECCIÓN NUEVA: Línea divisoria y botón para volver al inicio público -->
+                        <hr class="my-3 text-muted">
+                        <div class="text-center">
+                            <a href="/" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Volver a la Tienda
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>

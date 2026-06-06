@@ -15,17 +15,32 @@
                         <h4>Crear Cuenta en NovaFarmar</h4>
                     </div>
                     <div class="card-body">
+
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        @if(session('success'))
+                            <div class="alert alert-success">{{ session('success') }}</div>
+                        @endif
+
                         <form action="/registro" method="POST">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            @csrf
 
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nombre Completo</label>
-                                <input type="text" name="name" id="name" class="form-control" required>
+                                <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="email" class="form-label">Correo Electrónico</label>
-                                <input type="email" name="email" id="email" class="form-control" required>
+                                <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}" required>
                             </div>
 
                             <div class="mb-3">
@@ -34,11 +49,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="rol" class="form-label">Tipo de Usuario (Rol)</label>
-                                <select name="rol" id="rol" class="form-control" required>
-                                    <option value="cliente">Cliente</option>
-                                    <option value="admin">Administrador</option>
-                                </select>
+                                <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100">Registrarse</button>

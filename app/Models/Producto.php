@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
-   
     protected $fillable = [
         'nombre',
         'descripcion',
@@ -16,10 +15,14 @@ class Producto extends Model
         'activo',
     ];
 
-   
     protected $casts = [
         'precio' => 'decimal:2',
         'stock' => 'integer',
         'activo' => 'boolean',
     ];
+
+    public function scopeActivos($query)
+    {
+        return $query->where('activo', true);
+    }
 }

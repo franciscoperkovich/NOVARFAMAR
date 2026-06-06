@@ -1,12 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// 1. IMPORTACIONES (Siempre van arriba de todo)
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ProductoController;
 
-// 2. RUTAS PÚBLICAS DE LA TIENDA (NovaFarmar)
 Route::get('/', function () {
     return view('welcome');
 });
@@ -43,18 +42,22 @@ Route::get('/carrito', function () {
     return view('carrito');
 });
 
-
-// 3. RUTAS DE AUTENTICACIÓN (Formularios para ver las pantallas)
 Route::get('/registro', [AuthController::class, 'formularioRegistro']);
-Route::get('/login', [AuthController::class, 'formularioLogin']);
-
-
-// 4. RUTAS PARA PROCESAR LOS FORMULARIOS (Envío de datos POST)
+Route::get('/login', [AuthController::class, 'formularioLogin'])->name('login');
 Route::post('/registro', [AuthController::class, 'registrar']);
 Route::post('/login', [AuthController::class, 'autenticar']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
+Route::middleware(['auth', 'rol:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index']);
+    Route::get('/admin/productos', [ProductoController::class, 'index']);
+    Route::get('/admin/productos/crear', [ProductoController::class, 'crear']);
+    Route::post('/admin/productos', [ProductoController::class, 'guardar']);
+    Route::get('/admin/productos/{id}/editar', [ProductoController::class, 'editar']);
+    Route::put('/admin/productos/{id}', [ProductoController::class, 'actualizar']);
+    Route::delete('/admin/productos/{id}', [ProductoController::class, 'eliminar']);
+});
 
-// 5. RUTAS DE LOS PANELES DE USUARIO (Según el rol)
-Route::get('/admin/dashboard', [AdminController::class, 'index']);
-Route::get('/cliente/dashboard', [ClienteController::class, 'index']);
+Route::middleware(['auth', 'rol:cliente'])->group(function () {
+    Route::get('/cliente/dashboard', [ClienteController::class, 'index']);
+});
