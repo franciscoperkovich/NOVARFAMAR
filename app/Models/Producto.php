@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CarritoItem;
 
 class Producto extends Model
 {
@@ -13,6 +14,7 @@ class Producto extends Model
         'stock',
         'url_imagen',
         'activo',
+        'tipo'
     ];
 
     protected $casts = [
@@ -25,4 +27,9 @@ class Producto extends Model
     {
         return $query->where('activo', true);
     }
+
+    public function carritoItems()
+{
+    return $this->hasMany(CarritoItem::class);
+}
 }

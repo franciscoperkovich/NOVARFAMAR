@@ -70,6 +70,20 @@
                         <input type="url" name="url_imagen" class="form-control" value="{{ $producto->url_imagen }}">
                     </div>
 
+                    <select name="tipo" class="form-control">
+
+    <option value="medicamento"
+        {{ $producto->tipo == 'medicamento' ? 'selected' : '' }}>
+        Medicamento
+    </option>
+
+    <option value="cuidado_personal"
+        {{ $producto->tipo == 'cuidado_personal' ? 'selected' : '' }}>
+        Cuidado Personal
+    </option>
+
+</select>
+
                     <div class="mb-3 form-check">
                         <input type="checkbox" name="activo" id="activo" class="form-check-input"
                             {{ $producto->activo ? 'checked' : '' }}>

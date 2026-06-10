@@ -4,6 +4,16 @@
 
 @section('content')
 
+@if(session('success'))
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
+
+</div>
+
+@endif
+
 <div class="container mt-5 mb-5">
     <h2 class="text-center fw-bold mb-4">Contacto</h2>
 
@@ -22,26 +32,43 @@
                         Mensaje enviado correctamente ✅
                     </div>
 
-                    <form id="formContacto">
+                    <form method="POST" action="{{ route('consultas.guardar') }}">
 
-                        <input type="text" id="nombre" class="form-control mb-3" placeholder="Nombre" required>
+    @csrf
 
-                        <input type="email" id="email" class="form-control mb-3" placeholder="Email" required>
+    <input type="text"
+           name="nombre"
+           id="nombre"
+           class="form-control mb-3"
+           placeholder="Nombre"
+           required>
 
-                        <textarea id="mensaje" class="form-control mb-3" rows="4" placeholder="Escribí tu mensaje..." required></textarea>
+    <input type="email"
+           name="email"
+           id="email"
+           class="form-control mb-3"
+           placeholder="Email"
+           required>
 
-                        <button type="submit" class="btn btn-success w-100">
-                            Enviar mensaje
-                        </button>
+    <input type="text"
+           name="asunto"
+           id="asunto"
+           class="form-control mb-3"
+           placeholder="Asunto"
+           required>
 
-                    </form>
+    <textarea name="mensaje"
+              id="mensaje"
+              class="form-control mb-3"
+              rows="4"
+              placeholder="Escribí tu mensaje..."
+              required></textarea>
 
-                </div>
+    <button type="submit" class="btn btn-success w-100">
+        Enviar mensaje
+    </button>
 
-            </div>
-
-        </div>
-    </div>
+</form>
 
     <div class="mt-5">
         <h3 class="text-center fw-bold mb-3">📍 Visitános</h3>

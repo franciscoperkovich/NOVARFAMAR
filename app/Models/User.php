@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\CarritoItem;
+use App\Models\Venta;
 
 
 #[Fillable(['name', 'email', 'password', 'rol'])]
@@ -30,4 +32,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function carritoItems()
+{
+    return $this->hasMany(CarritoItem::class);
+}
+
+public function ventas()
+{
+    return $this->hasMany(Venta::class);
+}
 }

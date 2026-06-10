@@ -62,48 +62,79 @@
     </div>
 
     <div class="row welcome-products">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm border-0 product-card text-center p-4">
-                <div class="mb-3">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966489.png" class="producto-img">
-                </div>
-                <h5 class="fw-bold">Ibuprofeno 600mg</h5>
-                <p class="text-muted small">Caja x 20 cápsulas blandas</p>
-                <p class="fs-4 fw-bold text-success">$2.500</p>
-                <button class="btn btn-success w-100 mt-2 shadow-sm">
-                    <i class="bi bi-cart-plus"></i> Agregar
-                </button>
-            </div>
-        </div>
+
+    @foreach($productos as $producto)
 
         <div class="col-md-4 mb-4">
+
             <div class="card h-100 shadow-sm border-0 product-card text-center p-4">
+
                 <div class="mb-3">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2913/2913465.png" class="producto-img">
+
+                    @if($producto->url_imagen)
+
+    <img
+        src="{{ $producto->url_imagen }}"
+        class="producto-img">
+
+@else
+
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/2966/2966489.png"
+                            class="producto-img">
+
+                    @endif
+
                 </div>
-                <h5 class="fw-bold">Alcohol en Gel</h5>
-                <p class="text-muted small">Envase con dosificador 500ml</p>
-                <p class="fs-4 fw-bold text-success">$1.800</p>
-                <button class="btn btn-success w-100 mt-2 shadow-sm">
-                    <i class="bi bi-cart-plus"></i> Agregar
-                </button>
+
+                <h5 class="fw-bold">
+                    {{ $producto->nombre }}
+                </h5>
+
+                <p class="text-muted small">
+                    {{ $producto->descripcion }}
+                </p>
+
+                <p class="fs-4 fw-bold text-success">
+                    ${{ number_format($producto->precio, 0, ',', '.') }}
+                </p>
+
+                @auth
+
+               <form action="{{ route('carrito.agregar', $producto->id) }}"
+      method="POST">
+
+    @csrf
+
+    <button class="btn btn-success w-100 mt-2">
+
+        <i class="bi bi-cart-plus"></i>
+        Agregar al carrito
+
+    </button>
+
+</form>
+
+                @else
+
+                    <a href="/login"
+                       class="btn btn-success w-100 mt-2">
+
+                        Iniciar sesión
+
+                    </a>
+
+                @endauth
+
             </div>
+
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm border-0 product-card text-center p-4">
-                <div class="mb-3">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1684/1684375.png" class="producto-img">
-                </div>
-                <h5 class="fw-bold">Termómetro Digital</h5>
-                <p class="text-muted small">Alta precisión - Punta flexible</p>
-                <p class="fs-4 fw-bold text-success">$5.200</p>
-                <button class="btn btn-success w-100 mt-2 shadow-sm">
-                    <i class="bi bi-cart-plus"></i> Agregar
-                </button>
-            </div>
-        </div>
-    </div>
+    @endforeach
+
+</div>
+
+
 </div>
 
 @endsection

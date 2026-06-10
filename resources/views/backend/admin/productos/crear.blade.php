@@ -69,6 +69,18 @@
                         <input type="url" name="url_imagen" class="form-control" value="{{ old('url_imagen') }}">
                     </div>
 
+                    <select name="tipo" class="form-control">
+
+    <option value="medicamento">
+        Medicamento
+    </option>
+
+    <option value="cuidado_personal">
+        Cuidado Personal
+    </option>
+
+</select>
+
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-success">
                             <i class="bi bi-save"></i> Guardar

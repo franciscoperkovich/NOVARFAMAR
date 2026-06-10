@@ -17,4 +17,40 @@ class AdminController extends Controller
 
         return view('backend.admin.dashboard', compact('usuarios', 'productos', 'ventas'));
     }
+
+    public function usuarios()
+{
+    $usuarios = User::all();
+
+    return view(
+        'backend.admin.usuarios',
+        compact('usuarios')
+    );
+}
+
+public function ventas()
+{
+    $ventas = Venta::with('usuario')
+                    ->latest()
+                    ->get();
+
+    return view(
+        'backend.admin.ventas',
+        compact('ventas')
+    );
+}
+
+public function detalleVenta($id)
+{
+    $venta = Venta::with(
+        'usuario',
+        'detalles.producto'
+    )->findOrFail($id);
+
+    return view(
+        'backend.admin.detalleVenta',
+        compact('venta')
+    );
+}
+
 }

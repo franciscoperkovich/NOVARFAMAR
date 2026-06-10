@@ -21,10 +21,8 @@
                         Categorías
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/categoria1">Cuidado Personal</a></li>
-                        <li><a class="dropdown-item" href="/categoria2">Belleza</a></li>
-                        <li><a class="dropdown-item" href="/categoria3">Medicamentos</a></li>
-                    </ul>
+                        <li><a class="dropdown-item" href="/categoria1">Medicamentos</a></li>
+                        <li><a class="dropdown-item" href="/categoria2">Cuidado Personal</a></li>                    </ul>
                 </li>
 
                 @auth
@@ -39,6 +37,13 @@
                             <a href="/admin/dashboard" class="btn btn-danger text-white fw-bold">Panel Admin</a>
                         </li>
                     @endif
+
+                    <a href="/cliente/dashboard"
+   class="btn btn-light me-2">
+
+    <i class="bi bi-person-circle"></i>
+
+</a>
 
                     <li class="nav-item">
                         <form action="/logout" method="POST" class="d-inline">
@@ -60,9 +65,23 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="/carrito" class="btn btn-light position-relative w-100">
-                        <i class="bi bi-cart"></i>
-                    </a>
+<a href="{{ route('carrito.index') }}"
+   class="btn btn-light position-relative">
+
+    <i class="bi bi-cart"></i>
+
+    @if($cantidadCarrito > 0)
+
+        <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+            {{ $cantidadCarrito }}
+
+        </span>
+
+    @endif
+
+</a>
                 </li>
 
             </ul>

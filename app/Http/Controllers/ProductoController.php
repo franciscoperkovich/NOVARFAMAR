@@ -37,6 +37,7 @@ class ProductoController extends Controller
             'precio'      => $request->precio,
             'stock'       => $request->stock,
             'url_imagen'  => $request->url_imagen,
+            'tipo'        => $request->tipo,
             'activo'      => true,
         ]);
 
@@ -68,6 +69,7 @@ class ProductoController extends Controller
             'precio'      => $request->precio,
             'stock'       => $request->stock,
             'url_imagen'  => $request->url_imagen,
+            'tipo'        => $request->tipo,
             'activo'      => $request->has('activo') ? true : false,
         ]);
 

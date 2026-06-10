@@ -6,15 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Venta extends Model
 {
-    protected $fillable = ['user_id', 'total', 'estado'];
+    protected $fillable = [
+        'user_id',
+        'total',
+        'estado'
+    ];
 
-    public function user()
+    public function usuario()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function detalles()
     {
-        return $this->hasMany(DetalleVenta::class);
+        return $this->hasMany(
+            DetalleVenta::class
+        );
     }
 }

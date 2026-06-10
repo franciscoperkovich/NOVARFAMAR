@@ -52,7 +52,7 @@ User::create([
             if ($user->rol === 'admin') {
                 return redirect()->intended('/admin/dashboard');
             } else {
-                return redirect()->intended('/cliente/dashboard');
+                return redirect()->intended('/');
             }
         }
 

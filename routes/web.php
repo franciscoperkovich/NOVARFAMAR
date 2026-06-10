@@ -5,17 +5,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\CarritoController;
+use App\Models\Producto;
+use App\Http\Controllers\ConsultaController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/categoria1', function () {
-    return view('categoria1');
-});
+    $productos = Producto::where('activo', true)->get();
 
-Route::get('/categoria2', function () {
-    return view('categoria2');
+    return view('welcome', compact('productos'));
+
 });
 
 Route::get('/categoria3', function () {
@@ -56,8 +55,108 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
     Route::get('/admin/productos/{id}/editar', [ProductoController::class, 'editar']);
     Route::put('/admin/productos/{id}', [ProductoController::class, 'actualizar']);
     Route::delete('/admin/productos/{id}', [ProductoController::class, 'eliminar']);
+
+    Route::get(
+        '/admin/consultas',
+        [ConsultaController::class, 'index']
+    );
+
+     Route::get(
+        '/admin/usuarios',
+        [AdminController::class, 'usuarios']
+    );
+
+    Route::get(
+    '/admin/ventas',
+    [AdminController::class, 'ventas']
+);
+
+Route::get(
+    '/admin/ventas/{id}',
+    [AdminController::class, 'detalleVenta']
+);
+
 });
 
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::get('/cliente/dashboard', [ClienteController::class, 'index']);
+});
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get(
+        '/carrito',
+        [CarritoController::class, 'index']
+    )->name('carrito.index');
+
+    Route::post(
+        '/carrito/agregar/{id}',
+        [CarritoController::class, 'agregar']
+    )->name('carrito.agregar');
+
+    Route::post(
+        '/carrito/quitar/{id}',
+        [CarritoController::class, 'quitar']
+    )->name('carrito.quitar');
+
+    Route::post(
+    '/carrito/confirmar',
+    [CarritoController::class, 'confirmarCompra']
+)->name('carrito.confirmar');
+
+Route::get(
+    '/mis-compras',
+    [CarritoController::class, 'misCompras']
+)->name('miscompras');
+
+Route::post(
+    '/carrito/vaciar',
+    [CarritoController::class, 'vaciar']
+)->name('carrito.vaciar');
+
+Route::get('/perfil', function () {
+
+    return view('perfil');
+
+})->middleware('auth');
+
+Route::post(
+    '/contacto',
+    [ConsultaController::class, 'guardar']
+)->name('consultas.guardar');
+
+});
+
+Route::get('/categoria1', function () {
+
+    $productos = Producto::where(
+        'tipo',
+        'medicamento'
+    )->where(
+        'activo',
+        true
+    )->get();
+
+    return view(
+        'categoria1',
+        compact('productos')
+    );
+
+});
+
+Route::get('/categoria2', function () {
+
+    $productos = Producto::where(
+        'tipo',
+        'cuidado_personal'
+    )->where(
+        'activo',
+        true
+    )->get();
+
+    return view(
+        'categoria2',
+        compact('productos')
+    );
+
 });
