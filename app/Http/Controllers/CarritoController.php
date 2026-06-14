@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Venta;
 use App\Models\DetalleVenta;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CarritoController extends Controller
 {
@@ -33,18 +34,14 @@ class CarritoController extends Controller
             ->first();
 
         if ($item) {
-
             $item->cantidad += 1;
             $item->save();
-
         } else {
-
             CarritoItem::create([
                 'user_id' => Auth::id(),
                 'producto_id' => $id,
                 'cantidad' => 1
             ]);
-
         }
 
         $producto->stock -= 1;
@@ -68,13 +65,9 @@ class CarritoController extends Controller
         $item->cantidad -= 1;
 
         if ($item->cantidad <= 0) {
-
             $item->delete();
-
         } else {
-
             $item->save();
-
         }
 
         $producto->stock += 1;
@@ -84,83 +77,55 @@ class CarritoController extends Controller
     }
 
     public function confirmarCompra()
-{
-    $items = CarritoItem::with('producto')
-        ->where('user_id', Auth::id())
-        ->get();
+    {
+        $items = CarritoItem::with('producto')
+            ->where('user_id', Auth::id())
+            ->get();
 
-    if($items->isEmpty()){
-        return back();
-    }
+        if ($items->isEmpty()) {
+            return back();
+        }
 
-    $total = 0;
+        $total = 0;
+        foreach ($items as $item) {
+            $total += $item->cantidad * $item->producto->precio;
+        }
 
-    foreach($items as $item){
-
-        $total +=
-            $item->cantidad *
-            $item->producto->precio;
-
-    }
-
-    $venta = Venta::create([
-
-        'user_id' => Auth::id(),
-        'total' => $total,
-        'estado' => 'confirmada'
-
-    ]);
-
-    foreach($items as $item){
-
-        DetalleVenta::create([
-
-            'venta_id' => $venta->id,
-            'producto_id' => $item->producto_id,
-            'cantidad' => $item->cantidad,
-            'precio_unitario' => $item->producto->precio
-
+        $venta = Venta::create([
+            'user_id' => Auth::id(),
+            'total' => $total,
+            'estado' => 'confirmada'
         ]);
 
+        foreach ($items as $item) {
+            DetalleVenta::create([
+                'venta_id' => $venta->id,
+                'producto_id' => $item->producto_id,
+                'cantidad' => $item->cantidad,
+                'precio_unitario' => $item->producto->precio
+            ]);
+        }
+
+        CarritoItem::where('user_id', Auth::id())->delete();
+
+        // Generar y descargar PDF
+        $venta->load('detalles.producto');
+        $usuario = Auth::user();
+
+        $pdf = Pdf::loadView('pdf.factura', compact('venta', 'usuario'));
+
+        return $pdf->download('factura-' . $venta->id . '.pdf');
     }
 
-    CarritoItem::where(
-        'user_id',
-        Auth::id()
-    )->delete();
+    public function misCompras()
+    {
+        $ventas = Venta::where('user_id', auth()->id())->latest()->get();
+        return view('carrito.mis-compras', compact('ventas'));
+    }
 
-    return redirect()
-        ->route('carrito.index')
-        ->with(
-            'success',
-            'Compra realizada correctamente'
-        );
-}
-
-public function misCompras()
-{
-    $ventas = \App\Models\Venta::where(
-        'user_id',
-        auth()->id()
-    )->latest()->get();
-
-    return view(
-        'carrito.mis-compras',
-        compact('ventas')
-    );
-}
-
-public function vaciar()
-{
-    \App\Models\CarritoItem::where(
-        'user_id',
-        auth()->id()
-    )->delete();
-
-    return back()->with(
-        'success',
-        'Carrito vaciado correctamente'
-    );
-}
-
+    public function vaciar()
+    {
+        CarritoItem::where('user_id', auth()->id())->delete();
+        return back()->with('success', 'Carrito vaciado correctamente');
+    }
 }
