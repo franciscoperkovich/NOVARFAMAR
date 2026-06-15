@@ -34,28 +34,66 @@
 
                 <tbody>
 
-                @foreach($consultas as $consulta)
+@foreach($consultas as $consulta)
 
-                    <tr>
+<tr>
 
-                        <td>{{ $consulta->nombre }}</td>
+    <td>{{ $consulta->nombre }}</td>
 
-                        <td>{{ $consulta->email }}</td>
+    <td>{{ $consulta->email }}</td>
 
-                        <td>{{ $consulta->asunto }}</td>
+    <td>{{ $consulta->asunto }}</td>
 
-                        <td>{{ $consulta->mensaje }}</td>
+    <td>{{ $consulta->mensaje }}</td>
 
-                        <td>
-                            {{ $consulta->created_at->format('d/m/Y H:i') }}
-                        </td>
+    <td>
+        {{ $consulta->created_at->format('d/m/Y H:i') }}
+    </td>
 
-                    </tr>
+    <td>
 
-                @endforeach
+        @if($consulta->leida)
 
-                </tbody>
+            <span class="badge bg-success">
+                Leída
+            </span>
 
+        @else
+
+            <span class="badge bg-warning text-dark">
+                Pendiente
+            </span>
+
+        @endif
+
+    </td>
+
+    <td>
+
+        @if(!$consulta->leida)
+
+            <form action="/admin/consultas/{{ $consulta->id }}/leer"
+                  method="POST">
+
+                @csrf
+                @method('PUT')
+
+                <button class="btn btn-success btn-sm">
+                    Marcar como leída
+                </button>
+
+            </form>
+
+        @endif
+
+    </td>
+
+</tr>
+
+@endforeach
+
+</tbody>
+                
             </table>
 
         </div>

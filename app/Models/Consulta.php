@@ -10,6 +10,7 @@ class Consulta extends Model
         'nombre',
         'email',
         'asunto',
-        'mensaje'
+        'mensaje',
+        'leida'
     ];
 }

@@ -77,19 +77,32 @@ Route::get(
     [AdminController::class, 'detalleVenta']
 );
 
+Route::put(
+    '/admin/consultas/{id}/leer',
+    [ConsultaController::class, 'marcarLeida']
+);
+
 });
 
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
-    Route::get('/cliente/dashboard', [ClienteController::class, 'index']);
-    Route::get(
-    '/perfil',
-    [PerfilController::class, 'index']
-)->name('perfil');
 
-Route::post(
-    '/perfil/actualizar',
-    [PerfilController::class, 'actualizar']
-)->name('perfil.actualizar');
+    Route::get(
+        '/cliente/dashboard',
+        [ClienteController::class, 'index']
+    );
+
+    Route::get(
+        '/perfil',
+        [PerfilController::class, 'index']
+    )->name('perfil');
+
+    Route::post(
+        '/perfil/actualizar',
+        [PerfilController::class, 'actualizar']
+    )->name('perfil.actualizar');
+
+
+
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -124,16 +137,15 @@ Route::post(
     [CarritoController::class, 'vaciar']
 )->name('carrito.vaciar');
 
-Route::get('/perfil', function () {
-
-    return view('perfil');
-
-})->middleware('auth');
-
 Route::post(
     '/contacto',
     [ConsultaController::class, 'guardar']
 )->name('consultas.guardar');
+
+Route::get(
+    '/factura/{id}',
+    [CarritoController::class, 'descargarFactura']
+)->name('factura.descargar');
 
 });
 

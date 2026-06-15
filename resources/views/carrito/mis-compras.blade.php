@@ -6,6 +6,16 @@
 
 <div class="container mt-5">
 
+@if(session('success'))
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
+
+</div>
+
+@endif
+
     <h2 class="mb-4">
         Mis Compras
     </h2>
@@ -34,6 +44,13 @@
                     Total:
                     ${{ number_format($venta->total, 2) }}
                 </p>
+
+                <a
+    href="{{ route('factura.descargar', $venta->id) }}"
+    class="btn btn-primary"
+>
+    Descargar Factura
+</a>
 
             </div>
 

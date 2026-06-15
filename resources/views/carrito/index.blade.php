@@ -41,11 +41,19 @@
 
                         @if($item->producto->url_imagen)
 
-                            <img
-                                src="{{ asset('storage/'.$item->producto->url_imagen) }}"
-                                class="img-fluid rounded">
+    <img
+        src="{{ $item->producto->url_imagen }}"
+        class="img-fluid rounded"
+        style="max-height:120px; object-fit:contain;">
 
-                        @endif
+@else
+
+    <img
+        src="https://cdn-icons-png.flaticon.com/512/2966/2966489.png"
+        class="img-fluid rounded"
+        style="max-height:120px; object-fit:contain;">
+
+@endif
 
                     </div>
 

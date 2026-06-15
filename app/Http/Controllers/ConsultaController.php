@@ -33,4 +33,16 @@ class ConsultaController extends Controller
             compact('consultas')
         );
     }
+
+    public function marcarLeida($id)
+{
+    $consulta = Consulta::findOrFail($id);
+
+    $consulta->update([
+        'leida' => true
+    ]);
+
+    return back();
+}
+
 }
