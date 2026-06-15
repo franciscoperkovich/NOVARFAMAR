@@ -34,12 +34,11 @@
 
                     </p>
 
-                            <a href="/perfil"
-           class="btn btn-primary">
-
-            Editar Datos
-
-        </a>
+                            <a href="{{ route('perfil') }}"
+   class="btn btn-primary">
+    <i class="bi bi-person-gear"></i>
+    Modificar Datos
+</a>
 
                 </div>
 

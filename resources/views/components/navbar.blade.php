@@ -11,7 +11,11 @@
         <div class="collapse navbar-collapse" id="navbarContenido">
 
             <form class="d-flex mx-auto my-3 my-lg-0 w-100 w-lg-50">
-                <input class="form-control" type="search" placeholder="Buscar productos...">
+                <input
+    id="buscadorProductos"
+    class="form-control"
+    type="search"
+    placeholder="Buscar productos...">
             </form>
 
             <ul class="navbar-nav ms-auto align-items-lg-center gap-2">

@@ -4,6 +4,20 @@
 
 @section('content')
 
+@if(session('error'))
+
+<div class="container mt-3">
+
+    <div class="alert alert-danger">
+
+        {{ session('error') }}
+
+    </div>
+
+</div>
+
+@endif
+
 <div class="container mt-5">
     
     <div class="text-center mb-5">
@@ -65,9 +79,12 @@
 
     @foreach($productos as $producto)
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4 producto-card-busqueda">
 
-            <div class="card h-100 shadow-sm border-0 product-card text-center p-4">
+            <div
+    class="card h-100 shadow-sm border-0 product-card text-center p-4"
+    data-nombre="{{ strtolower($producto->nombre) }}"
+    data-descripcion="{{ strtolower($producto->descripcion) }}">
 
                 <div class="mb-3">
 
@@ -101,12 +118,34 @@
 
                 @auth
 
-               <form action="{{ route('carrito.agregar', $producto->id) }}"
+<form action="{{ route('carrito.agregar', $producto->id) }}"
       method="POST">
 
     @csrf
 
-    <button class="btn btn-success w-100 mt-2">
+    <input type="hidden"
+           name="cantidad"
+           value="1"
+           class="cantidad-input">
+
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
+
+        <button type="button"
+                class="btn btn-outline-danger btn-restar">
+            -
+        </button>
+
+        <span class="cantidad-text fw-bold">1</span>
+
+        <button type="button"
+                class="btn btn-outline-success btn-sumar"
+                data-stock="{{ $producto->stock }}">
+            +
+        </button>
+
+    </div>
+
+    <button class="btn btn-success w-100">
 
         <i class="bi bi-cart-plus"></i>
         Agregar al carrito
@@ -136,5 +175,74 @@
 
 
 </div>
+
+@section('scripts')
+
+<script>
+
+document.querySelectorAll('.btn-sumar').forEach(function(boton){
+
+    boton.addEventListener('click', function(){
+
+        let stock = parseInt(this.dataset.stock);
+
+        let form = this.closest('form');
+
+        let input = form.querySelector('.cantidad-input');
+
+        let texto = form.querySelector('.cantidad-text');
+
+        let cantidad = parseInt(input.value);
+
+        if(cantidad >= stock){
+
+            alert(
+                'No hay más stock disponible. Máximo: '
+                + stock
+            );
+
+            return;
+        }
+
+        cantidad++;
+
+        input.value = cantidad;
+
+        texto.textContent = cantidad;
+
+    });
+
+});
+
+
+document.querySelectorAll('.btn-restar').forEach(function(boton){
+
+    boton.addEventListener('click', function(){
+
+        let form = this.closest('form');
+
+        let input = form.querySelector('.cantidad-input');
+
+        let texto = form.querySelector('.cantidad-text');
+
+        let cantidad = parseInt(input.value);
+
+        if(cantidad > 1){
+
+            cantidad--;
+
+            input.value = cantidad;
+
+            texto.textContent = cantidad;
+
+        }
+
+    });
+
+});
+
+</script>
+
+@endsection
 
 @endsection

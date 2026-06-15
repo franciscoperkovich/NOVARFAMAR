@@ -70,5 +70,55 @@
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     @yield('scripts')
+    
+    <script>
+
+document.addEventListener('DOMContentLoaded', function(){
+
+    let buscador = document.getElementById('buscadorProductos');
+
+    if(!buscador) return;
+
+    buscador.addEventListener('keyup', function(){
+
+        let texto = this.value.toLowerCase();
+
+        let productos =
+            document.querySelectorAll(
+                '.producto-card-busqueda'
+            );
+
+        productos.forEach(function(producto){
+
+            let card =
+                producto.querySelector('.card');
+
+            let nombre =
+                card.dataset.nombre;
+
+            let descripcion =
+                card.dataset.descripcion;
+
+            if(
+                nombre.includes(texto) ||
+                descripcion.includes(texto)
+            ){
+
+                producto.style.display = '';
+
+            }else{
+
+                producto.style.display = 'none';
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
 </body>
 </html>

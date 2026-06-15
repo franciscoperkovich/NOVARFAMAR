@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 use App\Models\Producto;
 use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\PerfilController;
 
 Route::get('/', function () {
 
@@ -80,6 +81,15 @@ Route::get(
 
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::get('/cliente/dashboard', [ClienteController::class, 'index']);
+    Route::get(
+    '/perfil',
+    [PerfilController::class, 'index']
+)->name('perfil');
+
+Route::post(
+    '/perfil/actualizar',
+    [PerfilController::class, 'actualizar']
+)->name('perfil.actualizar');
 });
 
 Route::middleware(['auth'])->group(function () {

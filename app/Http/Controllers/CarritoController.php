@@ -21,34 +21,51 @@ class CarritoController extends Controller
         return view('carrito.index', compact('items'));
     }
 
-    public function agregar($id)
-    {
-        $producto = Producto::findOrFail($id);
+public function agregar(Request $request, $id)
+{
+    $producto = Producto::findOrFail($id);
 
-        if ($producto->stock <= 0) {
-            return back();
-        }
+    $cantidad = (int) $request->cantidad;
 
-        $item = CarritoItem::where('user_id', Auth::id())
-            ->where('producto_id', $id)
-            ->first();
-
-        if ($item) {
-            $item->cantidad += 1;
-            $item->save();
-        } else {
-            CarritoItem::create([
-                'user_id' => Auth::id(),
-                'producto_id' => $id,
-                'cantidad' => 1
-            ]);
-        }
-
-        $producto->stock -= 1;
-        $producto->save();
-
-        return back();
+    if ($cantidad <= 0) {
+        $cantidad = 1;
     }
+
+    if ($producto->stock < $cantidad) {
+
+        return back()->with(
+            'error',
+            'Stock insuficiente para ' .
+            $producto->nombre
+        );
+    }
+
+    $item = CarritoItem::where('user_id', Auth::id())
+        ->where('producto_id', $id)
+        ->first();
+
+    if ($item) {
+
+        $item->cantidad += $cantidad;
+        $item->save();
+
+    } else {
+
+        CarritoItem::create([
+            'user_id' => Auth::id(),
+            'producto_id' => $id,
+            'cantidad' => $cantidad
+        ]);
+    }
+
+    $producto->stock -= $cantidad;
+    $producto->save();
+
+    return back()->with(
+        'success',
+        'Producto agregado al carrito'
+    );
+}
 
     public function quitar($id)
     {

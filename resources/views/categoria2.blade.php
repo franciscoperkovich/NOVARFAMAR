@@ -10,7 +10,7 @@
         Cuidado Personal
     </h1>
 
-    <div id="carouselPagina2"
+    <div id="carouselPagina1"
          class="carousel slide carousel-fade shadow-lg mb-5 custom-carousel"
          data-bs-ride="carousel"
          data-bs-interval="3000">
@@ -34,6 +34,26 @@
 
         </div>
 
+        <button class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselPagina1"
+                data-bs-slide="prev">
+
+            <span class="carousel-control-prev-icon"></span>
+
+        </button>
+
+        <button class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselPagina1"
+                data-bs-slide="next">
+
+            <span class="carousel-control-next-icon"></span>
+
+        </button>
+
+    </div>
+
     </div>
 
     <h3 class="fw-bold text-center mb-4">
@@ -44,9 +64,12 @@
 
         @forelse($productos as $producto)
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4 producto-card-busqueda">
 
-            <div class="card h-100 shadow-sm">
+            <div
+    class="card h-100 shadow-sm border-0 product-card text-center p-4"
+    data-nombre="{{ strtolower($producto->nombre) }}"
+    data-descripcion="{{ strtolower($producto->descripcion) }}">
 
                 <img src="{{ $producto->url_imagen }}"
                      class="card-img-top"
@@ -62,33 +85,55 @@
                         ${{ number_format($producto->precio,2,',','.') }}
                     </h4>
 
-                    <p>
+                    <!--<p>
                         Stock:
                         {{ $producto->stock }}
-                    </p>
+                    </p> -->
 
                     @auth
 
                     <form action="{{ route('carrito.agregar', $producto->id) }}"
-                          method="POST">
+      method="POST">
 
-                        @csrf
+    @csrf
 
-                        <button class="btn btn-success">
+    <input type="hidden"
+           name="cantidad"
+           value="1"
+           class="cantidad-input">
 
-                            <i class="bi bi-cart-plus"></i>
-                            Agregar
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
 
-                        </button>
+        <button type="button"
+                class="btn btn-outline-danger btn-restar">
+            -
+        </button>
 
-                    </form>
+        <span class="cantidad-text fw-bold">1</span>
+
+        <button type="button"
+                class="btn btn-outline-success btn-sumar"
+                data-stock="{{ $producto->stock }}">
+            +
+        </button>
+
+    </div>
+
+    <button class="btn btn-success w-100">
+
+        <i class="bi bi-cart-plus"></i>
+        Agregar al carrito
+
+    </button>
+
+</form>
 
                     @else
 
                     <a href="/login"
                        class="btn btn-outline-success">
 
-                        Iniciar sesión para comprar
+                        Iniciar sesión
 
                     </a>
 
@@ -118,5 +163,74 @@
     </div>
 
 </div>
+
+@section('scripts')
+
+<script>
+
+document.querySelectorAll('.btn-sumar').forEach(function(boton){
+
+    boton.addEventListener('click', function(){
+
+        let stock = parseInt(this.dataset.stock);
+
+        let form = this.closest('form');
+
+        let input = form.querySelector('.cantidad-input');
+
+        let texto = form.querySelector('.cantidad-text');
+
+        let cantidad = parseInt(input.value);
+
+        if(cantidad >= stock){
+
+            alert(
+                'No hay más stock disponible. Máximo: '
+                + stock
+            );
+
+            return;
+        }
+
+        cantidad++;
+
+        input.value = cantidad;
+
+        texto.textContent = cantidad;
+
+    });
+
+});
+
+
+document.querySelectorAll('.btn-restar').forEach(function(boton){
+
+    boton.addEventListener('click', function(){
+
+        let form = this.closest('form');
+
+        let input = form.querySelector('.cantidad-input');
+
+        let texto = form.querySelector('.cantidad-text');
+
+        let cantidad = parseInt(input.value);
+
+        if(cantidad > 1){
+
+            cantidad--;
+
+            input.value = cantidad;
+
+            texto.textContent = cantidad;
+
+        }
+
+    });
+
+});
+
+</script>
+
+@endsection
 
 @endsection
