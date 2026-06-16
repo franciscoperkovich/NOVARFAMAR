@@ -28,16 +28,21 @@ class AdminController extends Controller
     );
 }
 
-public function ventas()
+public function ventas(Request $request)
 {
-    $ventas = Venta::with('usuario')
-                    ->latest()
-                    ->get();
+    $query = Venta::with('usuario')->latest();
 
-    return view(
-        'backend.admin.ventas',
-        compact('ventas')
-    );
+    if ($request->filled('desde')) {
+        $query->whereDate('created_at', '>=', $request->desde);
+    }
+
+    if ($request->filled('hasta')) {
+        $query->whereDate('created_at', '<=', $request->hasta);
+    }
+
+    $ventas = $query->get();
+
+    return view('backend.admin.ventas', compact('ventas'));
 }
 
 public function detalleVenta($id)
