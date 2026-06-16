@@ -89,26 +89,6 @@ Route::put(
 
 });
 
-Route::middleware(['auth', 'rol:cliente'])->group(function () {
-
-    Route::get(
-        '/cliente/dashboard',
-        [ClienteController::class, 'index']
-    );
-
-    Route::get(
-        '/perfil',
-        [PerfilController::class, 'index']
-    )->name('perfil');
-
-    Route::post(
-        '/perfil/actualizar',
-        [PerfilController::class, 'actualizar']
-    )->name('perfil.actualizar');
-
-
-
-});
 
 Route::middleware(['auth'])->group(function () {
 
@@ -151,6 +131,21 @@ Route::get(
     '/factura/{id}',
     [CarritoController::class, 'descargarFactura']
 )->name('factura.descargar');
+
+Route::get(
+        '/cliente/dashboard',
+        [ClienteController::class, 'index']
+    );
+
+ Route::get(
+        '/perfil',
+        [PerfilController::class, 'index']
+    )->name('perfil');
+
+    Route::post(
+        '/perfil/actualizar',
+        [PerfilController::class, 'actualizar']
+    )->name('perfil.actualizar');   
 
 });
 
