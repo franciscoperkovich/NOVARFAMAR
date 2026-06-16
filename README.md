@@ -3,7 +3,7 @@
 #Proyecto NovaFarmar
 
 #Lopez Machado Victor Roman
-#
+#Gomez Perkovich Francisco
 
 Proyecto NovaFarmar -Laravel- Grupo 23
 
