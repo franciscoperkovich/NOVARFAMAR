@@ -25,6 +25,8 @@
                         <th>Email</th>
                         <th>Rol</th>
                         <th>Fecha Registro</th>
+<th>Estado</th>
+<th>Acciones</th>
 
                     </tr>
 
@@ -63,6 +65,49 @@
                         <td>
                             {{ $usuario->created_at->format('d/m/Y') }}
                         </td>
+
+                        <td>
+
+    @if($usuario->activo)
+
+        <span class="badge bg-success">
+            Activo
+        </span>
+
+    @else
+
+        <span class="badge bg-secondary">
+            Inactivo
+        </span>
+
+    @endif
+
+</td>
+
+<td>
+
+    @if($usuario->activo)
+
+        <form
+            action="/admin/usuarios/{{ $usuario->id }}/baja"
+            method="POST">
+
+            @csrf
+            @method('PUT')
+
+            <button
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('¿Desactivar usuario?')">
+
+                Dar de baja
+
+            </button>
+
+        </form>
+
+    @endif
+
+</td>
 
                     </tr>
 

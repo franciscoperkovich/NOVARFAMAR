@@ -58,4 +58,26 @@ public function detalleVenta($id)
     );
 }
 
+public function bajaUsuario($id)
+{
+    $usuario = User::findOrFail($id);
+
+    if($usuario->id == auth()->id())
+    {
+        return back()->with(
+            'error',
+            'No puedes desactivar tu propia cuenta'
+        );
+    }
+
+    $usuario->update([
+        'activo' => false
+    ]);
+
+    return back()->with(
+        'success',
+        'Usuario desactivado correctamente'
+    );
+}
+
 }

@@ -82,6 +82,11 @@ Route::put(
     [ConsultaController::class, 'marcarLeida']
 );
 
+Route::put(
+    '/admin/usuarios/{id}/baja',
+    [AdminController::class, 'bajaUsuario']
+);
+
 });
 
 Route::middleware(['auth', 'rol:cliente'])->group(function () {

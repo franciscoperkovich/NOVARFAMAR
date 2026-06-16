@@ -8,13 +8,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RolMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(
+        Request $request,
+        Closure $next,
+        string $rol
+    ): Response
     {
+        if (auth()->user()->rol !== $rol) {
+            abort(403, 'No autorizado');
+        }
+
         return $next($request);
     }
 }

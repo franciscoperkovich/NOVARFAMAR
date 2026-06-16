@@ -38,28 +38,39 @@ User::create([
         return redirect('/login')->with('success', '¡Usuario creado con éxito!');
     }
 
-    public function autenticar(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+public function autenticar(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            $user = Auth::user();
+    if (Auth::attempt($credentials)) {
 
-            if ($user->rol === 'admin') {
-                return redirect()->intended('/admin/dashboard');
-            } else {
-                return redirect()->intended('/');
-            }
+        $user = Auth::user();
+
+        if (!$user->activo) {
+
+            Auth::logout();
+
+            return back()->withErrors([
+                'email' => 'La cuenta se encuentra deshabilitada.'
+            ]);
         }
 
-        return back()->withErrors([
-            'email' => 'Las credenciales no coinciden.',
-        ]);
+        $request->session()->regenerate();
+
+        if ($user->rol === 'admin') {
+            return redirect('/admin/dashboard');
+        }
+
+        return redirect('/');
     }
+
+    return back()->withErrors([
+        'email' => 'Las credenciales no coinciden.'
+    ]);
+}
 
     public function logout(Request $request)
     {
