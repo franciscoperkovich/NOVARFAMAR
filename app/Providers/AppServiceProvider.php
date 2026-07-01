@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CarritoItem;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
 public function boot(): void
 {
+
+    Paginator::useBootstrapFive();
+
     View::composer('*', function ($view) {
 
         $cantidadCarrito = 0;

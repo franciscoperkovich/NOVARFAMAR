@@ -18,6 +18,19 @@
                     </div>
                     <div class="card-body">
                         <form action="/login" method="POST">
+
+                            @if ($errors->any())
+    <div class="alert alert-danger">
+
+        @foreach($errors->all() as $error)
+
+            <div>{{ $error }}</div>
+
+        @endforeach
+
+    </div>
+@endif
+
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                             <div class="mb-3">

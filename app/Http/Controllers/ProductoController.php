@@ -7,20 +7,22 @@ use App\Models\Producto;
 
 class ProductoController extends Controller
 {
-    // Listar todos los productos
     public function index()
     {
-        $productos = Producto::all();
-        return view('backend.admin.productos.index', compact('productos'));
+        $productos = Producto::orderBy('id', 'asc')
+                             ->paginate(10);
+
+        return view(
+            'backend.admin.productos.index',
+            compact('productos')
+        );
     }
 
-    // Mostrar formulario de crear
     public function crear()
     {
         return view('backend.admin.productos.crear');
     }
 
-    // Guardar producto nuevo
     public function guardar(Request $request)
     {
         $request->validate([
@@ -32,26 +34,34 @@ class ProductoController extends Controller
         ]);
 
         Producto::create([
+
             'nombre'      => $request->nombre,
             'descripcion' => $request->descripcion,
             'precio'      => $request->precio,
             'stock'       => $request->stock,
             'url_imagen'  => $request->url_imagen,
             'tipo'        => $request->tipo,
-            'activo'      => true,
+            'activo'      => true
+
         ]);
 
-        return redirect('/admin/productos')->with('success', 'Producto creado con éxito.');
+        return redirect('/admin/productos')
+            ->with(
+                'success',
+                'Producto creado correctamente.'
+            );
     }
 
-    // Mostrar formulario de editar
     public function editar($id)
     {
         $producto = Producto::findOrFail($id);
-        return view('backend.admin.productos.editar', compact('producto'));
+
+        return view(
+            'backend.admin.productos.editar',
+            compact('producto')
+        );
     }
 
-    // Actualizar producto
     public function actualizar(Request $request, $id)
     {
         $request->validate([
@@ -63,25 +73,39 @@ class ProductoController extends Controller
         ]);
 
         $producto = Producto::findOrFail($id);
+
         $producto->update([
+
             'nombre'      => $request->nombre,
             'descripcion' => $request->descripcion,
             'precio'      => $request->precio,
             'stock'       => $request->stock,
             'url_imagen'  => $request->url_imagen,
             'tipo'        => $request->tipo,
-            'activo'      => $request->has('activo') ? true : false,
+            'activo'      => $request->has('activo')
+
         ]);
 
-        return redirect('/admin/productos')->with('success', 'Producto actualizado.');
+        return redirect('/admin/productos')
+            ->with(
+                'success',
+                'Producto actualizado correctamente.'
+            );
     }
 
-    // Baja lógica
     public function eliminar($id)
     {
         $producto = Producto::findOrFail($id);
-        $producto->update(['activo' => false]);
+        $producto->update([
 
-        return redirect('/admin/productos')->with('success', 'Producto dado de baja.');
+            'activo' => false
+
+        ]);
+
+        return redirect('/admin/productos')
+            ->with(
+                'success',
+                'Producto eliminado correctamente.'
+            );
     }
 }

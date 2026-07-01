@@ -1,92 +1,234 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos - NovaFarmar</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+@extends('layouts.app')
 
-    <nav class="navbar navbar-dark bg-dark px-4">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/admin/dashboard">
-                <i class="bi bi-house-door"></i> NovaFarmar | Panel Admin
-            </a>
-            <form action="/logout" method="POST" class="m-0">
-                @csrf
-                <button type="submit" class="btn btn-sm btn-outline-light">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-                </button>
-            </form>
+@section('title', 'Gestión de Productos')
+
+@section('content')
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>
+
+            Gestión de Productos
+
+        </h2>
+
+        <a href="/admin/productos/crear"
+           class="btn btn-success">
+
+            <i class="bi bi-plus-circle"></i>
+
+            Nuevo Producto
+
+        </a>
+
+    </div>
+
+    @if(session('success'))
+
+        <div class="alert alert-success alert-dismissible fade show">
+
+            {{ session('success') }}
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+            </button>
+
         </div>
-    </nav>
 
-    <div class="container mt-4">
+    @endif
 
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+    <div class="card shadow">
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3>Gestión de Productos</h3>
-            <a href="/admin/productos/crear" class="btn btn-success">
-                <i class="bi bi-plus-circle"></i> Nuevo Producto
-            </a>
-        </div>
+        <div class="card-body">
 
-        <div class="card shadow">
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Stock</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($productos as $producto)
-                        <tr>
-                            <td>{{ $producto->id }}</td>
-                            <td>{{ $producto->nombre }}</td>
-                            <td>${{ number_format($producto->precio, 2) }}</td>
-                            <td>{{ $producto->stock }}</td>
-                            <td>
-                                @if($producto->activo)
-                                    <span class="badge bg-success">Activo</span>
-                                @else
-                                    <span class="badge bg-danger">Inactivo</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="/admin/productos/{{ $producto->id }}/editar" class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </a>
-                                <form action="/admin/productos/{{ $producto->id }}" method="POST" class="d-inline">
+            <table class="table table-striped table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Nombre</th>
+
+                        <th>Precio</th>
+
+                        <th>Stock</th>
+
+                        <th>Estado</th>
+
+                        <th>Tipo</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                @forelse($productos as $producto)
+
+                    <tr>
+
+                        <td>
+
+                            {{ $producto->id }}
+
+                        </td>
+
+                        <td>
+
+                            {{ $producto->nombre }}
+
+                        </td>
+
+                        <td>
+
+                            ${{ number_format($producto->precio,2,',','.') }}
+
+                        </td>
+
+                        <td>
+
+                            @if($producto->stock > 0)
+
+                                <span class="badge bg-success">
+
+                                    {{ $producto->stock }}
+
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-danger">
+
+                                    Sin Stock
+
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                        <td>
+
+                            @if($producto->activo)
+
+                                <span class="badge bg-success">
+
+                                    Activo
+
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-secondary">
+
+                                    Inactivo
+
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                        <td>
+
+                            @if($producto->tipo == 'medicamento')
+
+                                <span class="badge bg-primary">
+
+                                    Medicamento
+
+                                </span>
+
+                            @else
+
+                                <span class="badge bg-info text-dark">
+
+                                    Cuidado Personal
+
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                        <td>
+
+                            <a href="/admin/productos/{{ $producto->id }}/editar"
+                               class="btn btn-warning btn-sm">
+
+                                <i class="bi bi-pencil"></i>
+
+                                Editar
+
+                            </a>
+
+                            @if($producto->activo)
+
+                                <form
+                                    action="/admin/productos/{{ $producto->id }}"
+                                    method="POST"
+                                    class="d-inline">
+
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                        onclick="return confirm('¿Dar de baja este producto?')">
-                                        <i class="bi bi-trash"></i> Baja
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('¿Está seguro que desea eliminar este producto?')">
+
+                                        <i class="bi bi-trash"></i>
+
+                                        Eliminar
+
                                     </button>
+
                                 </form>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">No hay productos cargados.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+
+                            @endif
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="text-center">
+
+                            No existen productos registrados.
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+                </tbody>
+
+            </table>
+
+            <div class="d-flex justify-content-center mt-4">
+
+                {{ $productos->links() }}
+
             </div>
+
         </div>
 
     </div>
-</body>
-</html>
+
+</div>
+
+@endsection

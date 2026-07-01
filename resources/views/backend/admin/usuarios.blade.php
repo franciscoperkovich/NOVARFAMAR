@@ -4,6 +4,26 @@
 
 @section('content')
 
+@if(session('error'))
+
+<div class="alert alert-danger">
+
+    {{ session('error') }}
+
+</div>
+
+@endif
+
+@if(session('success'))
+
+<div class="alert alert-success">
+
+    {{ session('success') }}
+
+</div>
+
+@endif
+
 <div class="container mt-5">
 
     <h2 class="mb-4">
@@ -25,8 +45,8 @@
                         <th>Email</th>
                         <th>Rol</th>
                         <th>Fecha Registro</th>
-<th>Estado</th>
-<th>Acciones</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
 
                     </tr>
 
@@ -46,10 +66,16 @@
 
                         <td>
 
-                            @if($usuario->rol == 'admin')
+                            @if($usuario->rol == 'superadmin')
+
+                                <span class="badge bg-dark">
+                                    Super Admin
+                                </span>
+
+                            @elseif($usuario->rol == 'admin')
 
                                 <span class="badge bg-danger">
-                                    Admin
+                                    Administrador
                                 </span>
 
                             @else
@@ -63,51 +89,105 @@
                         </td>
 
                         <td>
+
                             {{ $usuario->created_at->format('d/m/Y') }}
+
                         </td>
 
                         <td>
 
-    @if($usuario->activo)
+                            @if($usuario->activo)
 
-        <span class="badge bg-success">
-            Activo
-        </span>
+                                <span class="badge bg-success">
+                                    Activo
+                                </span>
 
-    @else
+                            @else
 
-        <span class="badge bg-secondary">
-            Inactivo
-        </span>
+                                <span class="badge bg-secondary">
+                                    Inactivo
+                                </span>
 
-    @endif
+                            @endif
 
-</td>
+                        </td>
 
-<td>
+                        <td>
 
-    @if($usuario->activo)
+                            {{-- SI EL USUARIO YA ESTÁ INACTIVO NO MOSTRAR NINGÚN BOTÓN --}}
+                            @if(!$usuario->activo)
 
-        <form
-            action="/admin/usuarios/{{ $usuario->id }}/baja"
-            method="POST">
+                                <span class="text-muted">
+                                    —
+                                </span>
 
-            @csrf
-            @method('PUT')
+                            @else
 
-            <button
-                class="btn btn-danger btn-sm"
-                onclick="return confirm('¿Desactivar usuario?')">
+                                {{-- SUPERADMIN --}}
+                                @if(auth()->user()->rol == 'superadmin')
 
-                Dar de baja
+                                    @if($usuario->id != auth()->id())
 
-            </button>
+                                        <form
+                                            action="/admin/usuarios/{{ $usuario->id }}/baja"
+                                            method="POST">
 
-        </form>
+                                            @csrf
+                                            @method('PUT')
 
-    @endif
+                                            <button
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('¿Desactivar usuario?')">
 
-</td>
+                                                Dar de baja
+
+                                            </button>
+
+                                        </form>
+
+                                    @else
+
+                                        <span class="text-muted">
+                                            Tu cuenta
+                                        </span>
+
+                                    @endif
+
+                                {{-- ADMIN --}}
+                                @elseif(auth()->user()->rol == 'admin')
+
+                                    @if($usuario->rol == 'cliente')
+
+                                        <form
+                                            action="/admin/usuarios/{{ $usuario->id }}/baja"
+                                            method="POST">
+
+                                            @csrf
+                                            @method('PUT')
+
+                                            <button
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('¿Desactivar usuario?')">
+
+                                                Dar de baja
+
+                                            </button>
+
+                                        </form>
+
+                                    @else
+
+                                        <span class="text-muted">
+                                            Sin permisos
+                                        </span>
+
+                                    @endif
+
+                                @endif
+
+                            @endif
+
+                        </td>
 
                     </tr>
 

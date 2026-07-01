@@ -60,18 +60,17 @@ public function autenticar(Request $request)
 
         $request->session()->regenerate();
 
-        if ($user->rol === 'admin') {
-            return redirect('/admin/dashboard');
-        }
+        if ($user->rol === 'admin' || $user->rol === 'superadmin') {
+    return redirect('/admin/dashboard');
+}
 
-        return redirect('/');
-    }
+return redirect('/');
 
     return back()->withErrors([
         'email' => 'Las credenciales no coinciden.'
     ]);
 }
-
+}
     public function logout(Request $request)
     {
         Auth::logout();

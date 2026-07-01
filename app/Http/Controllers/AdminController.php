@@ -62,12 +62,28 @@ public function bajaUsuario($id)
 {
     $usuario = User::findOrFail($id);
 
-    if($usuario->id == auth()->id())
-    {
+    // Nadie puede darse de baja a sí mismo
+    if ($usuario->id == auth()->id()) {
+
         return back()->with(
             'error',
-            'No puedes desactivar tu propia cuenta'
+            'No puedes desactivar tu propia cuenta.'
         );
+
+    }
+
+    // Un administrador NO puede desactivar administradores
+    // ni superadministradores
+    if (
+        auth()->user()->rol == 'admin' &&
+        $usuario->rol != 'cliente'
+    ) {
+
+        return back()->with(
+            'error',
+            'Solo un Superadministrador puede desactivar administradores.'
+        );
+
     }
 
     $usuario->update([
@@ -76,7 +92,7 @@ public function bajaUsuario($id)
 
     return back()->with(
         'success',
-        'Usuario desactivado correctamente'
+        'Usuario desactivado correctamente.'
     );
 }
 

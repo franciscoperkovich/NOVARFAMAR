@@ -8,16 +8,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RolMiddleware
 {
-    public function handle(
-        Request $request,
-        Closure $next,
-        string $rol
-    ): Response
-    {
-        if (auth()->user()->rol !== $rol) {
-            abort(403, 'No autorizado');
-        }
+    public function handle(Request $request, Closure $next, string $rol)
+{
+    $user = auth()->user();
 
+    if ($user->rol == 'superadmin') {
         return $next($request);
     }
+
+    if ($user->rol != $rol) {
+        abort(403);
+    }
+
+    return $next($request);
+}
 }
